@@ -25,7 +25,7 @@ What present country has a similar vibe and tone for your story? Is it a democra
 A world of the future is hard to relate to the modern, real-life, world. That doesn't mean its impossible, though. What country do you expect, several years in the future, to look the most like your world? Or, if you're feeling even more adventerous, what planets are included in your world (enter as a comma separated list)?
 
 ## Geology
-The best way to do this part is to visualize. I'm not sure if you're a traditional paper person or a web person so I'll tell you how to do both. On paper, pour some rice and draw along the greater outlines. Online, go to <a href="https://azgaar.github.io/Fantasy-Map-Generator/"></a>. Don't pay too much attention to the map yet, we're just here for a random outline. 
+The best way to do this part is to visualize. I'm not sure if you're a traditional paper person or a web person so I'll tell you how to do both. On paper, pour some rice and draw along the greater outlines. Online, go to [this website](https://azgaar.github.io/Fantasy-Map-Generator/). Don't pay too much attention to the map yet, we're just here for a random outline. 
 Now, think about the main features you want the part of the world your story takes place to have. If this story spans over the entire world, what diverse features do you want to include? Snowy mountains and parched deserts? What else? First and foremost, decide the scope of your world: small or large? (Keep your story in mind)
 Great, now think about some really cool scenes you want in your story. Where do they take place? At the edge of a dangerously tall cliff? On the docks of a harbor? Out in the open sea, up in the sky, what are some cool stages and locations? It's tempting to want to think about every aspect of the world, but we're not gods. (type "stop" to end the input sequence).
 
@@ -43,3 +43,8 @@ Religion is an important drive of humankind. You might not want to think about t
 ## Politics
 Politics is inescapable, both in reality and fantasy. Again, this is a major plot progressor. Politics defines the world, its people, and their differences. Think about the main country your story will take place in. What are the political issues at play? What is the power system? If multiple countries are involved, what are the striking differences? Which countries' leaders strive for power and wish to conquer? Which leaders are trying to progress science and economy, which are trying to progress the arts? In short, what is the political state of your world? Is it embroiled in world wars, is it a peaceful time with slight economic tensions? Try to make a mindmap elsewhere connecting each country and its leaders. Here, though, just write a few sentences for each country in the form of country - allies - enemies - leaders - goals. 
 
+## History
+_Fill in information_
+
+## Zoology and Botani
+_Fill in information_
