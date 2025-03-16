@@ -10,7 +10,7 @@
 - History
 - Zoology and Botany
 
-### Name
+## Name
 What is the name of the world? Put something in as a placeholder, we'll come back to this.
 
 ## Inspiration
