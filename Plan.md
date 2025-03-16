@@ -44,7 +44,14 @@ Religion is an important drive of humankind. You might not want to think about t
 Politics is inescapable, both in reality and fantasy. Again, this is a major plot progressor. Politics defines the world, its people, and their differences. Think about the main country your story will take place in. What are the political issues at play? What is the power system? If multiple countries are involved, what are the striking differences? Which countries' leaders strive for power and wish to conquer? Which leaders are trying to progress science and economy, which are trying to progress the arts? In short, what is the political state of your world? Is it embroiled in world wars, is it a peaceful time with slight economic tensions? Try to make a mindmap elsewhere connecting each country and its leaders. Here, though, just write a few sentences for each country in the form of country - allies - enemies - leaders - goals. 
 
 ## History
-_Fill in information_
+What are some events that define the world? Maybe creation myths, maybe a war hundreds of years ago that still leaves its impression on the people. Type these into a paragraph.
 
 ## Zoology and Botani
-_Fill in information_
+What are some creatures that prowl the world? What about plants? Are there magical herbs, poisons, spirits, or demons? This is best to write on your own, so enter the final version of your mini-encyclopedia here.
+
+## Quirks
+Each world has some quirks that make it memorable. The Koroks in Zelda, the "dam" joke in Percy Jackson and the Olympians. What's yours? 
+
+And there we are. Now, we shall take this information and confer it to a file you can save. Pick a name for a file that doesn't already exist on your device. 
+
+Your .txt world file is now ready!
