@@ -14,7 +14,8 @@
 What is the name of the world? Put something in as a placeholder, we'll come back to this.
 
 ## Inspiration
-Think about your story. Now think about the vibes of the world you're trying to create. Do you know what your real-world inspiration for your fantasy is? (If 'yes', enter the inspiration. Else, enter 'no')
+Think about your story. Now think about the vibes of the world you're trying to create. Do you know what your real-world inspiration for your fantasy is? (If 'yes', enter the inspiration. Else, enter 'no') 
+<br>
 (This part only starts if 'no')
 Start with time period: what time period is it closest to? (Include three options: past, present, future)
 (Past)
