@@ -5,7 +5,7 @@ from core.state import get_current_world, update_section
 inject_theme()
 world = get_current_world()
 
-st.image("assets/icons/geology.png", width=40)
+st.image("assets/icons/geology.svg", width=40)
 st.header("Geology")
 
 scale = st.selectbox(
