@@ -1,0 +1,33 @@
+# ------------------------
+# Python
+# ------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ------------------------
+# Virtual Environments
+# ------------------------
+.venv/
+venv/
+env/
+
+# ------------------------
+# Streamlit
+# ------------------------
+.streamlit/secrets.toml
+
+# ------------------------
+# Local World Data (User Projects)
+# ------------------------
+worlds/*
+!worlds/.gitkeep
+
+# ------------------------
+# OS / Editor Junk
+# ------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

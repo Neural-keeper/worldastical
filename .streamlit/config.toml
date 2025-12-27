@@ -1,0 +1,21 @@
+# -------------
+# App Configuration
+# -------------
+
+# Theme
+[theme]
+base = "dark"
+primaryColor = "#8b6f47"             # Rich bronze / parchment accent
+backgroundColor = "#1b140c"          # Dark parchment background
+secondaryBackgroundColor = "#2a2016" # Slightly lighter panels
+textColor = "#e6dcc6"                # Light parchment text
+font = "serif"                        # Classical reading font
+
+# App behavior
+[server]
+headless = true
+enableCORS = true
+port = 8501
+
+[browser]
+gatherUsageStats = false
