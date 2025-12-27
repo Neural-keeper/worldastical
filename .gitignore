@@ -31,3 +31,8 @@ worlds/*
 Thumbs.db
 .vscode/
 .idea/
+
+# ------------------------
+# The old worldastical file
+# ------------------------
+old-worldastical.py
