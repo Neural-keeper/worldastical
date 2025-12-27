@@ -1,25 +1,31 @@
 import json
-import os
+from pathlib import Path
 
-SAVE_DIR = "saved_worlds"
+DATA_DIR = Path("worlds")
+DATA_DIR.mkdir(exist_ok=True)
 
-# Ensure the save directory exists
-os.makedirs(SAVE_DIR, exist_ok=True)
+def world_file(name: str):
+    """Return Path object for a given world name"""
+    return DATA_DIR / f"{name}.json"
+
+def save_world(name: str, data: dict):
+    """Save world data to JSON"""
+    WORLD_FILE = world_file(name)
+    WORLD_FILE.write_text(json.dumps(data, indent=2))
+
+def load_world(name: str):
+    """Load world data; return empty dict if file does not exist"""
+    WORLD_FILE = world_file(name)
+    if WORLD_FILE.exists():
+        return json.loads(WORLD_FILE.read_text())
+    return {}
 
 def list_worlds():
-    """Return a list of saved world filenames (without extension)."""
-    return [f.replace(".json","") for f in os.listdir(SAVE_DIR) if f.endswith(".json")]
+    """Return a list of saved world names"""
+    return [f.stem for f in DATA_DIR.glob("*.json")]
 
-def save_world(name, world):
-    """Save the world dict as a JSON file."""
-    filepath = os.path.join(SAVE_DIR, f"{name}.json")
-    with open(filepath, "w", encoding="utf-8") as f:
-        json.dump(world, f, ensure_ascii=False, indent=4)
-
-def load_world(name):
-    """Load a world JSON file and return as dict."""
-    filepath = os.path.join(SAVE_DIR, f"{name}.json")
-    if not os.path.exists(filepath):
-        return {}
-    with open(filepath, "r", encoding="utf-8") as f:
-        return json.load(f)
+def delete_world(name: str):
+    """Delete a saved world"""
+    WORLD_FILE = world_file(name)
+    if WORLD_FILE.exists():
+        WORLD_FILE.unlink()
