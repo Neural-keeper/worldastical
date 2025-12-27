@@ -38,3 +38,13 @@ st.sidebar.markdown("### Progress")
 st.sidebar.progress(progress)
 
 st.markdown("Welcome! Use the navigation on the left to build your world.")
+
+world = get_current_world()
+
+st.download_button("Download JSON", json.dumps(world, indent=2), "world.json")
+st.download_button("Download Markdown", "\n".join([
+    f"# {world.get('name', 'Unnamed World')}",
+    f"## Inspiration\n{world.get('inspiration','')}",
+    f"## Geology\nScale: {world.get('geology',{}).get('scale','')}\n" +
+    "\n".join(f"- {l}" for l in world.get('geology',{}).get('locations',[]))
+]), "world.md")
