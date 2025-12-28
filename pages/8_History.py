@@ -40,7 +40,7 @@ else:
     """)
     
     # Editable, deletable list of places
-    for history in st.session_state.countries_list:
+    for history in st.session_state.histories_list:
         col1, col2 = st.columns([3,1])
 
         with col1:

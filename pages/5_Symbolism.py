@@ -42,7 +42,7 @@ else:
     """)
 
     # Editable, deletable list of places
-    for symbol in st.session_state.countries_list:
+    for symbol in st.session_state.symbols_list:
         col1, col2 = st.columns([3,1])
 
         with col1:

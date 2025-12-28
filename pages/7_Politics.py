@@ -50,7 +50,7 @@ else:
     form of country - allies - enemies - leaders - goals")
     
     # Editable, deletable list of places
-    for relation in st.session_state.countries_list:
+    for relation in st.session_state.relations_list:
         col1, col2 = st.columns([3,1])
 
         with col1:
