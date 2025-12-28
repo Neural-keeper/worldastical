@@ -30,10 +30,11 @@ if st.button("🪶 Create World"):
             from core.storage import save_world_section
             save_world_section(file_name, "Name", new_world_name)
             st.session_state.current_world = file_name
+            selected_world = file_name
             st.success(f"World {file_name} created")
 
 st.subheader("✒️ Navigate to a Section")
 st.write("Click a page in the left sidebar to edit its section. All pages will auto-fill if a world is loaded.")
 
-st.write("Your current world:", st.session_state.current_world)
+st.write("Your current world:", selected_world.removesuffix(".json"))
 
