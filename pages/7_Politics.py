@@ -47,7 +47,7 @@ else:
     """)
 
     st.write("Here, though, just write a few sentences for each country in the \
-form of country - allies - enemies - leaders - goals")
+    form of country - allies - enemies - leaders - goals")
     
     # Editable, deletable list of places
     for relation in st.session_state.countries_list:
