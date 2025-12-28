@@ -3,8 +3,8 @@ from core.storage import load_world, save_world_section
 from core.preview import render_world_markdown
 import uuid
 
-st.title("Political Geography")
-st.subheader("(Countries & Borders)")
+st.title("Religion")
+st.subheader("(Countries & their religions)")
 
 # Require a loaded world
 if "current_world" not in st.session_state or not st.session_state.current_world:
@@ -33,12 +33,14 @@ else:
             {"id": str(uuid.uuid4()), "value": ""}
         )
 
-    st.subheader("religions")
+    st.subheader("Religions")
     st.write("""
-    Use your inspiration to see how this works in real life. What are \
-    important things to each country? Think about the USA with its bald eagles and \
-    flag elements. Enter these potential elements in the form of Country : element 1, \
-    element 2, etc.
+    Religion is an important drive of humankind. You might not want to think \
+    about this, but the belief systems of people makes the world seem more real, even \
+    if you don't intend to address it directly in your book. What are important things for \
+    your people? What are values that different peoples debate against? What force \
+    keeps people on the morally right path? Is there one God, multiple Gods, or just \
+    the fear of the unknown?
     """)
     
     # Editable, deletable list of places

@@ -3,8 +3,8 @@ from core.storage import load_world, save_world_section
 from core.preview import render_world_markdown
 import uuid
 
-st.title("Political Geography")
-st.subheader("(Countries & Borders)")
+st.title("Symbolism")
+st.subheader("(Countries & their symbols)")
 
 # Require a loaded world
 if "current_world" not in st.session_state or not st.session_state.current_world:
