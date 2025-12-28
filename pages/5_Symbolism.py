@@ -40,7 +40,7 @@ else:
     flag elements. Enter these potential elements in the form of Country : element 1, \
     element 2, etc.
     """)
-    
+
     # Editable, deletable list of places
     for symbol in st.session_state.countries_list:
         col1, col2 = st.columns([3,1])
@@ -50,7 +50,7 @@ else:
                 "Country - Symbol",
                 value=symbol["value"],
                 key=f"symbol_input_{symbol['id']}",
-                placeholder="Elysium : Sharp Cliffs"
+                placeholder="Elysium : Plants, Sapphires"
             )
 
         with col2:
