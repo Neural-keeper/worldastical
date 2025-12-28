@@ -8,6 +8,7 @@ def _load_base64(path):
 def inject_theme():
     parchment = _load_base64("assets/parchment.jpg")
     font = _load_base64("assets/gothic.ttf")
+    sidebar_parchment = _load_base64("assets/parchment_sidebar.jpg")
 
     st.markdown(
         f"""
@@ -22,7 +23,6 @@ def inject_theme():
         /* --- Global Text --- */
         html, body, [class*="css"] {{
             font-family: 'Gothic', serif;
-            color: #e6dccf; /* parchment-light ink */
         }}
 
         /* --- App Background (Darkened Parchment) --- */
@@ -95,6 +95,85 @@ def inject_theme():
                 transparent
             );
             margin: 1.5em 0;
+        }}
+
+        /* --- Page Width & Manuscript Rhythm --- */
+        .main .block-container {{
+            max-width: 900px;
+            padding-top: 3rem;
+            padding-bottom: 4rem;
+            line-height: 1.75;
+        }}
+
+        /* Paragraph spacing like a printed book */
+        .stMarkdown p {{
+            margin-bottom: 1.1em;
+        }}
+
+        /* --- Illuminated Drop Cap --- */
+        .stMarkdown p:first-of-type::first-letter {{
+            float: left;
+            font-size: 3.2em;
+            line-height: 1;
+            padding-right: 0.12em;
+            padding-top: 0.08em;
+            color: #c9a35f;
+            text-shadow:
+                0 0 6px rgba(201,163,95,0.4),
+                0 0 14px rgba(0,0,0,0.8);
+        }}
+
+        /* --- Header Sigils --- */
+        h2 {{
+            position: relative;
+            padding-left: 3.2rem;
+        }}
+
+        /* Default sigil (fallback) */
+        h2::before {{
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 2.2rem;
+            height: 2.2rem;
+            transform: translateY(-50%);
+            opacity: 0.22;
+            background-size: contain;
+            background-repeat: no-repeat;
+        }}
+
+        /* --- SIDEBAR PARCHMENT --- */
+        section[data-testid="stSidebar"] {{
+            background-image: url("data:image/jpg;base64,{sidebar_parchment}");
+            background-size: cover;
+            background-position: center;
+            border-right: 1px solid rgba(139,111,71,0.4);
+        }}
+
+        /* Sidebar content spacing */
+        section[data-testid="stSidebar"] > div {{
+            padding-top: 2rem;
+        }}
+
+        /* Sidebar text */
+        section[data-testid="stSidebar"] * {{
+            color: #e6dcc6;
+            font-family: 'Gothic', serif;
+        }}
+
+        /* Sidebar navigation items */
+        section[data-testid="stSidebar"] a {{
+            text-decoration: none;
+            padding: 0.4rem 0.6rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }}
+
+        section[data-testid="stSidebar"] a:hover {{
+            background-color: rgba(139,111,71,0.15);
         }}
 
         </style>

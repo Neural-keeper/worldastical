@@ -1,31 +1,36 @@
+import os
 import json
-from pathlib import Path
 
-DATA_DIR = Path("worlds")
-DATA_DIR.mkdir(exist_ok=True)
+WORLD_FOLDER = "worlds"
 
-def world_file(name: str):
-    """Return Path object for a given world name"""
-    return DATA_DIR / f"{name}.json"
-
-def save_world(name: str, data: dict):
-    """Save world data to JSON"""
-    WORLD_FILE = world_file(name)
-    WORLD_FILE.write_text(json.dumps(data, indent=2))
-
-def load_world(name: str):
-    """Load world data; return empty dict if file does not exist"""
-    WORLD_FILE = world_file(name)
-    if WORLD_FILE.exists():
-        return json.loads(WORLD_FILE.read_text())
-    return {}
+if not os.path.exists(WORLD_FOLDER):
+    os.makedirs(WORLD_FOLDER)
 
 def list_worlds():
-    """Return a list of saved world names"""
-    return [f.stem for f in DATA_DIR.glob("*.json")]
+    """Return list of JSON world files"""
+    return [f for f in os.listdir(WORLD_FOLDER) if f.endswith(".json")]
 
-def delete_world(name: str):
-    """Delete a saved world"""
-    WORLD_FILE = world_file(name)
-    if WORLD_FILE.exists():
-        WORLD_FILE.unlink()
+def load_world(file_name):
+    """Load a world JSON, return empty dict if not found"""
+    path = os.path.join(WORLD_FOLDER, file_name)
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {}
+
+def save_world_section(file_name, section_key, section_data):
+    """Update a section in a world JSON"""
+    path = os.path.join(WORLD_FOLDER, file_name)
+    world = load_world(file_name)
+    world[section_key] = section_data
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(world, f, indent=4, ensure_ascii=False)
+
+def delete_world(file_name):
+    """Delete a world JSON file"""
+    path = os.path.join(WORLD_FOLDER, file_name)
+    if os.path.exists(path):
+        os.remove(path)
+        return True
+    return False
+

@@ -1,58 +1,39 @@
 import streamlit as st
-from core.theme import inject_theme
-from core.state import list_worlds, set_current_world, delete_world, get_current_world
-import json
+from core.storage import list_worlds
 
-# Helper Rerun function
-def rerun():
-    """Replacement for deprecated st.experimental_rerun"""
-    st.session_state._rerun = True
-    st.stop()
+st.set_page_config(page_title="Worldastical", layout="wide")
+st.title("Worldastical: Main Menu")
 
-inject_theme()
-st.title("Worldastical")
+# Initialize session state for current world
+if "current_world" not in st.session_state:
+    st.session_state.current_world = None
 
-# --- World Selection ---
-st.sidebar.markdown("## Load or Create World")
+st.subheader("1️⃣ Create or Load a World")
 
-existing = list_worlds()
-choice = st.sidebar.selectbox("Select a world:", ["<new>"] + existing)
+world_files = list_worlds()
+selected_world = st.selectbox("Load existing world:", [""] + world_files)
 
-if choice == "<new>":
-    new_name = st.sidebar.text_input("New world name:")
-    if new_name:
-        world = set_current_world(new_name)
-        st.sidebar.success(f"New world '{new_name}' created.")
-else:
-    world = set_current_world(choice)
-    st.sidebar.success(f"Loaded world '{choice}'")
+if selected_world:
+    st.session_state.current_world = selected_world
+    st.success(f"Loaded {selected_world}")
 
-# Delete world button
-if choice != "<new>" and st.sidebar.button("Delete this world"):
-    delete_world(choice)
-    st.sidebar.warning(f"Deleted world '{choice}'")
-    rerun()  # reload the app so selection updates
+new_world_name = st.text_input("Or create a new world (without .json)")
+if st.button("Create World"):
+    if not new_world_name.strip():
+        st.error("World name cannot be empty")
+    else:
+        file_name = new_world_name.strip() + ".json"
+        if file_name in world_files:
+            st.error("World already exists")
+        else:
+            from core.default_world import DEFAULT_WORLD
+            from core.storage import save_world_section
+            save_world_section(file_name, "Name", new_world_name)
+            st.session_state.current_world = file_name
+            st.success(f"World {file_name} created")
 
-# Progress calculation
-sections = [
-    "name", "inspiration", "geology", "political_geography",
-    "symbolism", "religion", "politics", "history",
-    "zoology_and_botany", "quirk"
-]
+st.subheader("2️⃣ Navigate to a Section")
+st.write("Click a page in the left sidebar to edit its section. All pages will auto-fill if a world is loaded.")
 
-progress = sum(1 for s in sections if s in get_current_world()) / len(sections)
-st.sidebar.markdown("### Progress")
-st.sidebar.progress(progress)
-
-st.markdown("Welcome! Use the navigation on the left to build your world.")
-
-world = get_current_world()
-
-st.download_button("Download JSON", json.dumps(world, indent=2), "world.json")
-st.download_button("Download Markdown", "\n".join([
-    f"# {world.get('name', 'Unnamed World')}",
-    f"## Inspiration\n{world.get('inspiration','')}",
-    f"## Geology\nScale: {world.get('geology',{}).get('scale','')}\n" +
-    "\n".join(f"- {l}" for l in world.get('geology',{}).get('locations',[]))
-]), "world.md")
+st.write("Your current world:", st.session_state.current_world)
 
