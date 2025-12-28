@@ -17,7 +17,7 @@ if selected_world:
     st.session_state.current_world = selected_world
     st.success(f"Loaded {selected_world}")
 
-new_world_name = st.text_input("Or create a new world (without .json)")
+new_world_name = st.text_input("Or create a new world (no extension, only letters, digits, and '_')")
 if st.button("🪶 Create World"):
     if not new_world_name.strip():
         st.error("World name cannot be empty")
