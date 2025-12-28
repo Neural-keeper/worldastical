@@ -8,17 +8,17 @@ st.title("Worldastical: Main Menu")
 if "current_world" not in st.session_state:
     st.session_state.current_world = None
 
-st.subheader("1️⃣ Create or Load a World")
+st.subheader("📜🪶 Create or Load a World")
 
 world_files = list_worlds()
-selected_world = st.selectbox("Load existing world:", [""] + world_files)
+selected_world = st.selectbox("📜 Load existing world:", [""] + world_files)
 
 if selected_world:
     st.session_state.current_world = selected_world
     st.success(f"Loaded {selected_world}")
 
 new_world_name = st.text_input("Or create a new world (without .json)")
-if st.button("Create World"):
+if st.button("🪶 Create World"):
     if not new_world_name.strip():
         st.error("World name cannot be empty")
     else:
@@ -32,7 +32,7 @@ if st.button("Create World"):
             st.session_state.current_world = file_name
             st.success(f"World {file_name} created")
 
-st.subheader("2️⃣ Navigate to a Section")
+st.subheader("✒️ Navigate to a Section")
 st.write("Click a page in the left sidebar to edit its section. All pages will auto-fill if a world is loaded.")
 
 st.write("Your current world:", st.session_state.current_world)
