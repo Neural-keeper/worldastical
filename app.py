@@ -3,6 +3,12 @@ from core.theme import inject_theme
 from core.state import list_worlds, set_current_world, delete_world, get_current_world
 import json
 
+# Helper Rerun function
+def rerun():
+    """Replacement for deprecated st.experimental_rerun"""
+    st.session_state._rerun = True
+    st.stop()
+
 inject_theme()
 st.title("Worldastical")
 
@@ -25,7 +31,7 @@ else:
 if choice != "<new>" and st.sidebar.button("Delete this world"):
     delete_world(choice)
     st.sidebar.warning(f"Deleted world '{choice}'")
-    st.experimental_rerun()  # reload the app so selection updates
+    rerun()  # reload the app so selection updates
 
 # Progress calculation
 sections = [
@@ -49,3 +55,4 @@ st.download_button("Download Markdown", "\n".join([
     f"## Geology\nScale: {world.get('geology',{}).get('scale','')}\n" +
     "\n".join(f"- {l}" for l in world.get('geology',{}).get('locations',[]))
 ]), "world.md")
+

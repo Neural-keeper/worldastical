@@ -1,6 +1,7 @@
 import streamlit as st
 from core.theme import inject_theme
 from core.state import get_current_world, update_section
+from core.preview import *
 
 inject_theme()
 world = get_current_world()
@@ -26,13 +27,6 @@ if st.button("Save Geology"):
 st.markdown('<img src="assets/divider.png" style="width:100%; margin:1em 0;">', unsafe_allow_html=True)
 
 # Live Markdown preview
-st.markdown("### Live World Preview")
-md = f"""
-## Geology
-- Scale: {scale}
-- Locations:
-"""
-for loc in locations.splitlines():
-    md += f"  - {loc}\n"
-
-st.markdown(md)
+# --- FULL MANUSCRIPT PREVIEW ---
+st.markdown("### World Manuscript (Live)")
+st.markdown(render_world_markdown(world))
