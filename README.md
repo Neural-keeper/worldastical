@@ -65,5 +65,4 @@ World-building sessions are managed using Streamlit session state.
 - `web_deployable/` — deployment-ready web version built for broader hosting and scalability
 
 ## Screenshot
-<img width="644" height="64" alt="Screenshot 2026-07-20 140300" src="https://github.com/user-attachments/assets/1fe2ff4f-e8a1-4066-b601-9fbd1b6edc09" />
 <img width="1669" height="912" alt="Screenshot 2025-12-28 204445" src="https://github.com/user-attachments/assets/aa863f6f-fcdb-4382-ac9a-2f99d6743f37" />
