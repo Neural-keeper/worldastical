@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Worldastical</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Creative worldbuilding platform</p>
+          <h1>Worldastical</h1>
+        </div>
+        <span class="badge">Web deployable prototype</span>
+      </header>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <h2>Create a world</h2>
+          <form method="post" action="{{ url_for('create_world') }}">
+            <label>
+              World name
+              <input type="text" name="name" placeholder="Example: Elaria" required>
+            </label>
+
+            <label>
+              Inspiration
+              <textarea name="inspiration" rows="3" placeholder="What influenced this world?"></textarea>
+            </label>
+
+            <label>
+              Geology
+              <textarea name="geology" rows="3" placeholder="Mountains, oceans, cliffs, or biomes"></textarea>
+            </label>
+
+            <label>
+              Religion
+              <textarea name="religion" rows="3" placeholder="Belief systems, rituals, sacred sites"></textarea>
+            </label>
+
+            <label>
+              Politics
+              <textarea name="politics" rows="3" placeholder="Kingdoms, factions, and systems of power"></textarea>
+            </label>
+
+            <label>
+              History
+              <textarea name="history" rows="3" placeholder="Defining events and long-term timelines"></textarea>
+            </label>
+
+            <label>
+              Quirk
+              <textarea name="quirk" rows="3" placeholder="A magical or social trait that shapes the world"></textarea>
+            </label>
+
+            <button type="submit">Save world</button>
+          </form>
+        </section>
+
+        <section class="panel list-panel">
+          <h2>Saved worlds</h2>
+          {% if worlds %}
+            <ul class="world-list">
+              {% for world in worlds %}
+                <li class="world-item">
+                  <div>
+                    <h3>{{ world.name }}</h3>
+                    <p>{{ world.inspiration or 'No inspiration provided yet.' }}</p>
+                  </div>
+                  <form method="post" action="{{ url_for('delete_world', name=world.name) }}">
+                    <button type="submit" class="danger">Delete</button>
+                  </form>
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="empty-state">No worlds yet. Create your first world to begin.</p>
+          {% endif %}
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
