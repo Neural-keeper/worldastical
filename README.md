@@ -66,7 +66,7 @@ World-building sessions are managed using Streamlit session state.
 
 ## Screenshot
 
-> Add a portfolio screenshot of the app interface here to showcase the user workflow and final experience.
+<img width="1669" height="912" alt="Screenshot 2025-12-28 204445" src="https://github.com/user-attachments/assets/aa863f6f-fcdb-4382-ac9a-2f99d6743f37" />
 
 ## What needs to change for web deployment
 
