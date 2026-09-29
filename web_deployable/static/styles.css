@@ -156,6 +156,93 @@ button.danger:hover {
   color: var(--muted);
 }
 
+.world-item a {
+  color: var(--accent-dark);
+}
+
+.progress-wrap {
+  margin: 0 0 24px;
+}
+
+.progress-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.progress-track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e8e2da;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.section-nav {
+  display: grid;
+  gap: 6px;
+}
+
+.section-nav a {
+  padding: 11px 14px;
+  border-radius: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.section-nav a:hover,
+.section-nav a.active {
+  color: var(--accent-dark);
+  background: rgba(124, 77, 255, 0.12);
+}
+
+.prompt {
+  margin-top: 0;
+  color: var(--muted);
+  white-space: pre-line;
+}
+
+select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+button.secondary {
+  background: #e7e2da;
+  color: var(--ink);
+}
+
+button.secondary:hover {
+  background: #d8d0c5;
+}
+
 .empty-state {
   color: var(--muted);
   margin: 24px 0 0;
@@ -163,6 +250,10 @@ button.danger:hover {
 
 @media (max-width: 860px) {
   .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .editor-layout {
     grid-template-columns: 1fr;
   }
 

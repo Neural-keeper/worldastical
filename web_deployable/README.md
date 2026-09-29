@@ -24,10 +24,10 @@ This gives you a working production architecture without needing to manage your 
 
 ## Local development
 
-```bash
+```powershell
 cd web_deployable
 python -m venv .venv
-. .venv\Scripts\activate
+.\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python app.py
 ```
@@ -56,7 +56,8 @@ CREATE TABLE IF NOT EXISTS worlds (
     religion TEXT,
     politics TEXT,
     history TEXT,
-    quirk TEXT
+    quirk TEXT,
+    sections TEXT
 );
 ```
 
@@ -113,8 +114,8 @@ This directory includes the deployment-ready files needed for Render:
 
 Copy `.env.example` to `.env` and edit it locally:
 
-```bash
-cp .env.example .env
+```powershell
+Copy-Item .env.example .env
 ```
 
 Example:

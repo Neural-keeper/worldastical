@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ section }} - Worldastical</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">{{ world.get('Name') or name }}</p>
+          <h1>{{ section }}</h1>
+        </div>
+        <a class="badge" href="{{ url_for('index') }}">All worlds</a>
+      </header>
+      <div class="progress-wrap">
+        <div class="progress-label"><span>Progress</span><span>{{ (progress * 100)|round|int }}%</span></div>
+        <div class="progress-track"><div class="progress-bar" style="width: {{ progress * 100 }}%"></div></div>
+      </div>
+      <main class="editor-layout">
+        <nav class="section-nav" aria-label="World sections">
+          {% for item in sections %}
+            <a class="{% if item == section %}active{% endif %}" href="{{ url_for('edit_section', name=name, section=item) }}">{{ loop.index }}. {{ item }}</a>
+          {% endfor %}
+        </nav>
+        <section class="panel editor-panel">
+          <p class="prompt">{{ content }}</p>
+          <form method="post">
+            {% if section == 'Inspiration' %}
+              <label>Do you know the real-world inspiration?
+                <select name="known">
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </label>
+              <label>Inspiration
+                <input type="text" name="value" value="{{ value }}" placeholder="Enter your inspiration">
+              </label>
+              <label>Time period if you are still exploring
+                <select name="period"><option>Past</option><option>Present</option><option>Future</option></select>
+              </label>
+            {% elif section == 'Geology' %}
+              <label>World scale
+                <select name="scale"><option>Small</option><option>Large</option></select>
+              </label>
+              <label>Locations, one per line
+                <textarea name="places" rows="8" placeholder="Cliffs of Moher">{{ places }}</textarea>
+              </label>
+            {% elif section == 'Political Geography' %}
+              <label>Countries (country: features)
+                <textarea name="countries" rows="7">{{ countries }}</textarea>
+              </label>
+              <label>Borders (country1 - country2: feature)
+                <textarea name="borders" rows="7">{{ borders }}</textarea>
+              </label>
+            {% elif section in ['Symbolism', 'Politics', 'History'] %}
+              <label>{{ section }} details, one per line
+                <textarea name="value" rows="10">{{ value }}</textarea>
+              </label>
+            {% elif section == 'Name' %}
+              <label>World name
+                <input type="text" name="value" value="{{ value }}" required>
+              </label>
+            {% else %}
+              <label>{{ section }} details
+                <textarea name="value" rows="10">{{ value }}</textarea>
+              </label>
+            {% endif %}
+            <div class="editor-actions">
+              {% if section_index > 0 %}<button type="submit" name="action" value="previous" class="secondary">Previous</button>{% endif %}
+              <button type="submit" name="action" value="save">Save {{ section }}</button>
+              {% if section_index < sections|length - 1 %}<button type="submit" name="action" value="next">Save and Next</button>{% endif %}
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
