@@ -89,16 +89,6 @@ World-building sessions are managed using Streamlit session state.
 
 <img width="1669" height="912" alt="Screenshot 2025-12-28 204445" src="https://github.com/user-attachments/assets/aa863f6f-fcdb-4382-ac9a-2f99d6743f37" />
 
-## What needs to change for web deployment
+## Web deployment
 
-The current implementation is a strong local prototype, but it still needs several changes before it can be deployed as a production web application:
-
-- Replace local file storage with a hosted database or cloud storage solution.
-- Move world data out of a local `worlds/` directory into PostgreSQL, Supabase, Firebase, or another managed backend.
-- Add environment variables and deployment configuration for secrets and settings.
-- Authentication and per-user world ownership are implemented in `web_deployable/`; production deployments should use HTTPS and a strong secret key.
-- Use a production hosting platform such as Render, Railway, Azure App Service, or Streamlit Cloud.
-- Add session management, concurrency handling, and cloud-safe data access patterns.
-- Consider separating the front-end experience from the data layer if the project expands further.
-
-This project demonstrates a solid creative-tech foundation, and the deployable version in `web_deployable/` is designed to move the concept closer to a production-ready web application.
+The current implementation is a strong local prototype, which has been adapted for production at https://worldastical.onrender.com/
