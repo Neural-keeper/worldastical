@@ -1,6 +1,6 @@
 # Worldastical Web Deployable
 
-This directory contains a deployable version of the Worldastical worldbuilding app. It is structured as a browser-based Flask service with a hosted Postgres database option for production, while still supporting a local SQLite fallback for development.
+This directory contains the authenticated, deployable web version of the Worldastical worldbuilding app. It is structured as a browser-based Flask service with a hosted Postgres database option for production, while still supporting a local SQLite fallback for development.
 
 ## Recommended deployment stack
 
@@ -48,18 +48,28 @@ This is the easiest path to a fully deployable app.
 2. In the SQL editor, run:
 
 ```sql
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS worlds (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(255) NOT NULL UNIQUE,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    name VARCHAR(255) NOT NULL,
     inspiration TEXT,
     geology TEXT,
     religion TEXT,
     politics TEXT,
     history TEXT,
     quirk TEXT,
-    sections TEXT
+    sections TEXT,
+    UNIQUE (user_id, name)
 );
 ```
+
+The app hashes passwords and stores only the hash. World queries are always scoped by the signed-in user's `user_id`, so accounts cannot view or modify one another's worlds.
 
 3. In Supabase, click **Connect**, choose **Session pooler**, select the **URI** format, and copy that connection string. The Session Pooler avoids direct IPv6 connection failures from Render.
 4. In Render, create a new Web Service and connect this repository.
@@ -69,6 +79,7 @@ CREATE TABLE IF NOT EXISTS worlds (
 DATABASE_URL=postgresql://postgres.<project-id>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
 SECRET_KEY=your-random-secret
 FLASK_DEBUG=false
+SESSION_COOKIE_SECURE=true
 ```
 
 6. Use the start command:
@@ -108,6 +119,7 @@ This directory includes the deployment-ready files needed for Render:
 
 - Local development uses SQLite automatically when no `DATABASE_URL` is present.
 - Production uses Supabase Postgres automatically when `DATABASE_URL` is set.
+- Authentication is required for the web app, and each world belongs to one user account.
 - This approach keeps local testing simple while making deployment easy.
 
 ## Environment setup example
@@ -132,7 +144,7 @@ Before launching publicly, make sure you also have:
 
 - a secure `SECRET_KEY`
 - a real production database instead of local SQLite
-- authentication if multiple users will access it
+- HTTPS enabled on the production host
 - proper logging and monitoring
 - backups for the database
 - environment variables set in Render instead of hardcoded values

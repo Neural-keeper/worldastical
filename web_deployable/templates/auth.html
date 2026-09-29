@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ mode }} - Worldastical</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Creative worldbuilding platform</p>
+          <h1>Worldastical</h1>
+        </div>
+      </header>
+      <main class="layout">
+        <section class="panel form-panel">
+          <h2>{{ mode }}</h2>
+          {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
+          <form method="post">
+            <label>Username
+              <input type="text" name="username" autocomplete="username" required>
+            </label>
+            <label>Password
+              <input type="password" name="password" autocomplete="{% if mode == 'Register' %}new-password{% else %}current-password{% endif %}" required>
+            </label>
+            <button type="submit">{{ mode }}</button>
+          </form>
+          {% if mode == 'Register' %}
+            <p>Already have an account? <a href="{{ url_for('login') }}">Log in</a>.</p>
+          {% else %}
+            <p>Need an account? <a href="{{ url_for('register') }}">Register</a>.</p>
+          {% endif %}
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

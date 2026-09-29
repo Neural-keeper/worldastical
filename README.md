@@ -1,6 +1,25 @@
 # Worldastical
 
-Worldastical is a worldbuilding and creative planning tool designed to help writers, game designers, and storytellers structure a fictional universe with clarity and consistency. The project started as a lightweight Streamlit application for local use and has been expanded into a deployable web-oriented version under the `web_deployable/` directory.
+Worldastical is a worldbuilding and creative planning tool designed to help writers, game designers, and storytellers structure a fictional universe with clarity and consistency. It is available as both a lightweight local Streamlit application and an authenticated Flask web application under the `web_deployable/` directory.
+
+## Two versions
+
+### Local version
+
+The project root contains the original Streamlit application for a single writer working locally. It stores worlds as JSON files in the local `worlds/` directory.
+
+```powershell
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+The local version does not provide accounts or multi-user access; its data remains in the local workspace.
+
+### Web-deployed version
+
+The `web_deployable/` directory contains the browser-based Flask version for hosting on Render or a similar platform. It supports registration and login with hashed passwords, and every world is assigned to its owning user. Users can only list, open, edit, or delete their own worlds.
+
+For production, configure `DATABASE_URL` to use PostgreSQL, set a random `SECRET_KEY`, and run the app with Gunicorn. Without `DATABASE_URL`, the web version uses SQLite for local development. See [web_deployable/README.md](web_deployable/README.md) for setup details.
 
 ## Project Overview
 
@@ -48,6 +67,8 @@ The prototype currently stores world data in local JSON files.
 - World states are written into a local `worlds/` directory.
 - This keeps the prototype simple and portable during early development.
 
+The web version uses separate `users` and `worlds` database tables. Each world has a `user_id` owner, so web data is separated by account rather than being globally visible.
+
 ### Phase 4: User flow and state management
 
 World-building sessions are managed using Streamlit session state.
@@ -62,7 +83,7 @@ World-building sessions are managed using Streamlit session state.
 - `core/` — world schema and persistence logic
 - `pages/` — individual worldbuilding sections
 - `ui/` — shared layout and content components
-- `web_deployable/` — deployment-ready web version built for broader hosting and scalability
+- `web_deployable/` — authenticated deployment-ready web version built for broader hosting and scalability
 
 ## Screenshot
 
@@ -75,7 +96,7 @@ The current implementation is a strong local prototype, but it still needs sever
 - Replace local file storage with a hosted database or cloud storage solution.
 - Move world data out of a local `worlds/` directory into PostgreSQL, Supabase, Firebase, or another managed backend.
 - Add environment variables and deployment configuration for secrets and settings.
-- Implement authentication and multi-user support.
+- Authentication and per-user world ownership are implemented in `web_deployable/`; production deployments should use HTTPS and a strong secret key.
 - Use a production hosting platform such as Render, Railway, Azure App Service, or Streamlit Cloud.
 - Add session management, concurrency handling, and cloud-safe data access patterns.
 - Consider separating the front-end experience from the data layer if the project expands further.

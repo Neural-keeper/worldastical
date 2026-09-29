@@ -218,6 +218,16 @@ button.danger:hover {
   white-space: pre-line;
 }
 
+.form-error {
+  margin: 0 0 18px;
+  padding: 12px 14px;
+  border: 1px solid #e6a5a5;
+  border-radius: 10px;
+  background: #fff1f1;
+  color: #9f2f2f;
+  font-weight: 700;
+}
+
 select {
   width: 100%;
   border: 1px solid var(--border);

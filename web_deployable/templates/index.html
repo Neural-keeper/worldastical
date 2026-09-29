@@ -13,11 +13,17 @@
           <p class="eyebrow">Creative worldbuilding platform</p>
           <h1>Worldastical</h1>
         </div>
-        <span class="badge">Create or load a world</span>
+        <div>
+          <span class="badge">{{ session.username }}</span>
+          <form method="post" action="{{ url_for('logout') }}">
+            <button type="submit" class="secondary">Log out</button>
+          </form>
+        </div>
       </header>
       <main class="layout">
         <section class="panel form-panel">
           <h2>Create a new world</h2>
+          {% if error %}<p class="form-error" role="alert">{{ error }}</p>{% endif %}
           <form method="post" action="{{ url_for('create_world') }}">
             <label>World name
               <input type="text" name="name" placeholder="Example: Elaria" required>
