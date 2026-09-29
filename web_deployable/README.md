@@ -122,6 +122,16 @@ This directory includes the deployment-ready files needed for Render:
 - Authentication is required for the web app, and each world belongs to one user account.
 - This approach keeps local testing simple while making deployment easy.
 
+### Render startup migration failure
+
+If Render reports `psycopg2.errors.InFailedSqlTransaction` during `init_db()`, the
+database migration attempted to add a column that already existed. PostgreSQL then
+marked that transaction as failed, so later setup queries were rejected as well.
+The migration now uses PostgreSQL's idempotent `ADD COLUMN IF NOT EXISTS` syntax and
+keeps separate SQLite handling, so restarting the service safely supports both new
+and previously initialized databases. PostgreSQL legacy rows are also read by
+column name because production connections use `RealDictCursor`.
+
 ## Environment setup example
 
 Copy `.env.example` to `.env` and edit it locally:

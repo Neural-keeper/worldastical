@@ -82,17 +82,25 @@ def init_db():
                 UNIQUE (user_id, name)
             )
         """)
-        try:
-            cur.execute("ALTER TABLE worlds ADD COLUMN sections TEXT")
-        except (sqlite3.OperationalError, psycopg2.errors.DuplicateColumn):
-            pass
-        try:
-            cur.execute("ALTER TABLE worlds ADD COLUMN user_id INTEGER")
-        except (sqlite3.OperationalError, psycopg2.errors.DuplicateColumn):
-            pass
+        if database_url:
+            cur.execute("ALTER TABLE worlds ADD COLUMN IF NOT EXISTS sections TEXT")
+            cur.execute("ALTER TABLE worlds ADD COLUMN IF NOT EXISTS user_id INTEGER")
+        else:
+            try:
+                cur.execute("ALTER TABLE worlds ADD COLUMN sections TEXT")
+            except sqlite3.OperationalError:
+                pass
+            try:
+                cur.execute("ALTER TABLE worlds ADD COLUMN user_id INTEGER")
+            except sqlite3.OperationalError:
+                pass
         marker = "%s" if database_url else "?"
         cur.execute("SELECT COUNT(*) FROM worlds WHERE user_id IS NULL")
-        if cur.fetchone()[0]:
+        legacy_world_count = cur.fetchone()
+        legacy_world_count = (
+            legacy_world_count["count"] if database_url else legacy_world_count[0]
+        )
+        if legacy_world_count:
             cur.execute(f"SELECT id FROM users WHERE username = {marker}", ("legacy_owner",))
             legacy_user = cur.fetchone()
             if not legacy_user:
@@ -102,9 +110,10 @@ def init_db():
                 )
                 cur.execute(f"SELECT id FROM users WHERE username = {marker}", ("legacy_owner",))
                 legacy_user = cur.fetchone()
+            legacy_user_id = legacy_user["id"] if database_url else legacy_user[0]
             cur.execute(
                 f"UPDATE worlds SET user_id = {marker} WHERE user_id IS NULL",
-                (legacy_user[0],),
+                (legacy_user_id,),
             )
 
 
