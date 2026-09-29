@@ -3,6 +3,21 @@ import pytest
 import app as app_module
 
 
+class FakeCache:
+    def __init__(self):
+        self.values = {}
+
+    def get(self, key):
+        return self.values.get(key)
+
+    def setex(self, key, _ttl, value):
+        self.values[key] = value
+
+    def delete(self, *keys):
+        for key in keys:
+            self.values.pop(key, None)
+
+
 @pytest.fixture
 def client(tmp_path, monkeypatch):
     monkeypatch.delenv("DATABASE_URL", raising=False)
@@ -33,6 +48,23 @@ def test_health_check(client):
 
     assert response.status_code == 200
     assert response.get_json() == {"status": "ok"}
+
+
+def test_world_cache_is_invalidated_after_save(client, monkeypatch):
+    cache = FakeCache()
+    monkeypatch.setattr(app_module, "CACHE", cache)
+    name = "Cache World"
+    client.post("/worlds", data={"name": name})
+    user_id = current_test_user_id()
+
+    app_module.load_worlds(user_id)
+    app_module.load_world(name, user_id)
+    assert cache.values
+
+    world = app_module.load_world(name, user_id)
+    app_module.save_world(name, world, user_id)
+
+    assert cache.values == {}
 
 
 def test_worlds_require_authentication(client):

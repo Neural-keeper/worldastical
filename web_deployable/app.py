@@ -8,6 +8,7 @@ from functools import wraps
 from pathlib import Path
 
 import psycopg2
+import redis
 from dotenv import load_dotenv
 from flask import Flask, has_request_context, redirect, render_template, request, session, url_for
 from psycopg2.extras import RealDictCursor
@@ -19,6 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
 DATA_DIR.mkdir(exist_ok=True)
 LOCAL_DB = DATA_DIR / "worlds.db"
+REDIS_URL = os.getenv("REDIS_URL")
+try:
+    CACHE_TTL_SECONDS = int(os.getenv("CACHE_TTL_SECONDS", "300"))
+except ValueError:
+    CACHE_TTL_SECONDS = 300
+CACHE = redis.from_url(REDIS_URL, decode_responses=True) if REDIS_URL else None
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config["JSON_SORT_KEYS"] = False
@@ -121,6 +128,44 @@ def current_user_id() -> int | None:
     return session.get("user_id") if has_request_context() else None
 
 
+def world_list_cache_key(user_id: int) -> str:
+    return f"worlds:user:{user_id}:list"
+
+
+def world_cache_key(user_id: int, name: str) -> str:
+    return f"worlds:user:{user_id}:name:{name.casefold()}"
+
+
+def cached_json(key: str):
+    if CACHE is None:
+        return None
+    try:
+        value = CACHE.get(key)
+        return json.loads(value) if value is not None else None
+    except (redis.RedisError, TypeError, json.JSONDecodeError):
+        return None
+
+
+def cache_json(key: str, value) -> None:
+    if CACHE is None:
+        return
+    try:
+        CACHE.setex(key, CACHE_TTL_SECONDS, json.dumps(value))
+    except (redis.RedisError, TypeError, ValueError):
+        pass
+
+
+def invalidate_world_cache(user_id: int, *names: str) -> None:
+    if CACHE is None:
+        return
+    keys = [world_list_cache_key(user_id)]
+    keys.extend(world_cache_key(user_id, name) for name in names if name)
+    try:
+        CACHE.delete(*keys)
+    except redis.RedisError:
+        pass
+
+
 def login_required(view):
     @wraps(view)
     def wrapped(*args, **kwargs):
@@ -182,16 +227,27 @@ def row_to_world(row: dict) -> dict:
 
 def load_worlds(user_id: int | None = None) -> list[dict]:
     user_id = user_id if user_id is not None else current_user_id()
+    if user_id is not None:
+        cached_worlds = cached_json(world_list_cache_key(user_id))
+        if cached_worlds is not None:
+            return cached_worlds
     database_url = os.getenv("DATABASE_URL")
     marker = "%s" if database_url else "?"
     with get_db_connection() as conn:
         cur = conn.cursor()
         cur.execute(f"SELECT * FROM worlds WHERE user_id = {marker} ORDER BY id", (user_id,))
-        return [dict(row) for row in cur.fetchall()]
+        worlds = [dict(row) for row in cur.fetchall()]
+    if user_id is not None:
+        cache_json(world_list_cache_key(user_id), worlds)
+    return worlds
 
 
 def load_world(name: str, user_id: int | None = None) -> dict | None:
     user_id = user_id if user_id is not None else current_user_id()
+    if user_id is not None:
+        cached_world = cached_json(world_cache_key(user_id, name))
+        if cached_world is not None:
+            return cached_world
     database_url = os.getenv("DATABASE_URL")
     marker = "%s" if database_url else "?"
     with get_db_connection() as conn:
@@ -201,7 +257,10 @@ def load_world(name: str, user_id: int | None = None) -> dict | None:
             (user_id, name),
         )
         row = cur.fetchone()
-    return row_to_world(dict(row)) if row else None
+    world = row_to_world(dict(row)) if row else None
+    if user_id is not None and world is not None:
+        cache_json(world_cache_key(user_id, name), world)
+    return world
 
 
 def create_world_record(name: str, user_id: int | None = None) -> None:
@@ -213,6 +272,8 @@ def create_world_record(name: str, user_id: int | None = None) -> None:
             f"INSERT INTO worlds (user_id, name, sections) VALUES ({marker}, {marker}, {marker})",
             (user_id, name, json.dumps(blank_world(name))),
         )
+    if user_id is not None:
+        invalidate_world_cache(user_id, name)
 
 
 def save_world(name: str, world: dict, user_id: int | None = None) -> None:
@@ -231,6 +292,8 @@ def save_world(name: str, world: dict, user_id: int | None = None) -> None:
             json.dumps(world.get("Politics", [])), json.dumps(world.get("History", [])),
             str(world.get("Quirk", "")), json.dumps(world), user_id, name,
         ))
+    if user_id is not None:
+        invalidate_world_cache(user_id, name, world.get("Name", ""))
 
 
 def delete_world_record(name: str, user_id: int | None = None) -> None:
@@ -242,6 +305,8 @@ def delete_world_record(name: str, user_id: int | None = None) -> None:
             f"DELETE FROM worlds WHERE user_id = {marker} AND LOWER(name) = LOWER({marker})",
             (user_id, name),
         )
+    if user_id is not None:
+        invalidate_world_cache(user_id, name)
 
 
 def lines(value: str) -> list[str]:

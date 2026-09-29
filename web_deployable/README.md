@@ -18,6 +18,7 @@ This gives you a working production architecture without needing to manage your 
 - Flask — backend web application
 - Jinja templates — page rendering
 - PostgreSQL via Supabase — production database
+- Redis — optional cache for frequently loaded worlds
 - SQLite — local development fallback
 - Gunicorn — production server for Render
 - Python-dotenv — environment variable loading
@@ -77,6 +78,8 @@ The app hashes passwords and stores only the hash. World queries are always scop
 
 ```bash
 DATABASE_URL=postgresql://postgres.<project-id>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+REDIS_URL=rediss://default:<password>@<redis-host>:<port>
+CACHE_TTL_SECONDS=300
 SECRET_KEY=your-random-secret
 FLASK_DEBUG=false
 SESSION_COOKIE_SECURE=true
@@ -119,8 +122,19 @@ This directory includes the deployment-ready files needed for Render:
 
 - Local development uses SQLite automatically when no `DATABASE_URL` is present.
 - Production uses Supabase Postgres automatically when `DATABASE_URL` is set.
+- Redis caching is enabled when `REDIS_URL` is set; otherwise the app uses the database directly.
+- Cached world lists and details are scoped by user and expire after `CACHE_TTL_SECONDS` (default: 300).
+- World creation, edits, renames, and deletion invalidate the affected cache entries.
 - Authentication is required for the web app, and each world belongs to one user account.
 - This approach keeps local testing simple while making deployment easy.
+
+### Redis setup
+
+Create a Redis instance with a managed provider such as Upstash, then add its
+connection string as the `REDIS_URL` environment variable in Render. Use `rediss://`
+when the provider requires TLS. Redis is an optimization rather than a required
+service: if it is unavailable, cache operations are ignored and database reads
+continue normally.
 
 ### Render startup migration failure
 
