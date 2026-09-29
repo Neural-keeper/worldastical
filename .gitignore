@@ -33,6 +33,11 @@ Thumbs.db
 .idea/
 
 # ------------------------
+# Private deployment notes
+# ------------------------
+web_deployable/PRIVATE_DEPLOYMENT_GUIDE.md
+
+# ------------------------
 # The old worldastical file
 # ------------------------
 old-worldastical.py
