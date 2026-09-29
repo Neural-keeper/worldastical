@@ -61,12 +61,12 @@ CREATE TABLE IF NOT EXISTS worlds (
 );
 ```
 
-3. Copy your Supabase connection string from Project Settings > Database > Connection string.
+3. In Supabase, click **Connect**, choose **Session pooler**, select the **URI** format, and copy that connection string. The Session Pooler avoids direct IPv6 connection failures from Render.
 4. In Render, create a new Web Service and connect this repository.
 5. Set the following environment variables:
 
 ```bash
-DATABASE_URL=postgresql://postgres:<password>@<host>:5432/postgres
+DATABASE_URL=postgresql://postgres.<project-id>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
 SECRET_KEY=your-random-secret
 FLASK_DEBUG=false
 ```
